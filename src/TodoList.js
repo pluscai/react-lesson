@@ -1,5 +1,6 @@
 import React,{ Component, Fragment } from 'react';
 import TodoItem from "./TodoItem";
+import axios from 'axios';
 import './style.css'
 
 class TodoList extends Component{
@@ -14,13 +15,9 @@ class TodoList extends Component{
         this.handleBtnClick = this.handleBtnClick.bind(this);
         this.handleItemDelete = this.handleItemDelete.bind(this);
     }
-    // 在组件即将被挂载到页面的时刻自动执行
-    componentWillMount() {
-        console.log('componentWillMount')
-    }
+
 
     render() {
-        console.log('render')
         return (
             <Fragment>
                 <div>
@@ -40,31 +37,15 @@ class TodoList extends Component{
         )
     }
 
-    // 在组件被挂载到页面之后，自动被执行
     componentDidMount() {
-        console.log('componentDidMount')
+        axios.get('/api/todolist.json')
+            .then((res) => {
+                this.setState(() => ({
+                    list: [...res.data]
+                }));
+            })
+            .catch(() => {alert('error')})
     }
-
-    // 组件更新之前，他会自动被执行
-    shouldComponentUpdate() {
-        console.log('shouldComponentUpdate');
-        return true;
-    }
-
-    // 组件更新之前，他会自动被执行,在shouldComponentUpdate之后
-    // 在shouldComponentUpdate返回true才执行
-    componentWillUpdate() {
-        console.log('componentWillUpdate');
-    }
-
-    // 组件更新完成之后，他会自动被执行
-    componentDidUpdate() {
-        console.log(' componentDidUpdate');
-    }
-
-
-
-
 
     getTodoItem() {
         return this.state.list.map((item, index) => {
